@@ -1,12 +1,17 @@
 // TypeScript interfaces for onboarding wizard
 
+// Plan tiers
+export type PlanTier = 'basic' | 'pro' | 'enterprise';
+
 // Main form data structure
 export interface OnboardingFormData {
+  plan: PlanTier;
   business: BusinessInfo;
   whatsapp: WhatsAppConfig;
   services: ServicesConfig;
-  schedule: ScheduleConfig;
-  policies: BusinessPolicies;
+  tenants: TenantConfig[];  // New: multiple tenants
+  schedule: ScheduleConfig; // Deprecated: moved to tenant level
+  policies: BusinessPolicies; // Deprecated: moved to tenant level
   assistant: AssistantConfig;
 }
 
@@ -28,22 +33,18 @@ export interface BusinessInfo {
   };
 }
 
-export type IndustryType =
-  | 'barberia'
-  | 'hospital'
-  | 'gym'
-  | 'spa'
-  | 'restaurant'
-  | 'consultorio'
-  | 'other';
+// Industry is now free text (not restricted to enum)
+export type IndustryType = string;
 
 // Step 2: WhatsApp Configuration
 export interface WhatsAppConfig {
-  hasAccount: boolean;
   phoneNumber: string;
-  phoneNumberId?: string;
-  accessToken?: string;
-  businessAccountId?: string;
+  phoneNumberId: string;
+  businessAccountId: string;
+  accessToken: string;
+  webhookVerifyToken: string;
+  appId?: string;
+  appSecret?: string;
 }
 
 // Step 3: Services
@@ -94,6 +95,24 @@ export interface AssistantConfig {
   customRules: string[];
 }
 
+// Step 4 (New): Tenant Configuration
+export interface TenantConfig {
+  id: string;
+  tenantName: string;
+  email?: string;
+  specialty?: string; // For hospitals: "Medicina General", "Pediatría", etc.
+  services: string[]; // Service IDs from Step 3
+  businessHours: ScheduleConfig;
+  appointmentSettings: {
+    slotInterval: number;
+    allowSameDayBooking: boolean;
+    maxAdvanceBookingDays: number;
+    minAdvanceBookingHours: number;
+    allowCancellation: boolean;
+    minCancellationHours: number;
+  };
+}
+
 // Final JSON output
 export interface OnboardingOutput {
   metadata: {
@@ -101,7 +120,20 @@ export interface OnboardingOutput {
     createdAt: string;
     completedBy: string;
   };
-  client: OnboardingFormData;
+  client: {
+    plan: PlanTier;
+    clientName: string;
+    industry: IndustryType;
+    location: BusinessInfo['location'];
+    timezone: string;
+    contactPerson: BusinessInfo['contactPerson'];
+    whatsappConfig: Omit<WhatsAppConfig, 'hasAccount'>;
+    assistantConfig: AssistantConfig;
+    status: 'trial' | 'active' | 'suspended';
+    tier: PlanTier;
+  };
+  services: Service[];
+  tenants: TenantConfig[];
   nextSteps: string[];
 }
 

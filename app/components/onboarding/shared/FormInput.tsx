@@ -3,7 +3,7 @@ import React from 'react';
 interface FormInputProps {
   label: string;
   name: string;
-  type?: 'text' | 'email' | 'tel' | 'number';
+  type?: 'text' | 'email' | 'tel' | 'number' | 'password';
   value: string | number;
   onChange: (value: string) => void;
   placeholder?: string;
@@ -11,6 +11,7 @@ interface FormInputProps {
   error?: string;
   disabled?: boolean;
   className?: string;
+  helpText?: string;
 }
 
 export const FormInput: React.FC<FormInputProps> = ({
@@ -23,7 +24,8 @@ export const FormInput: React.FC<FormInputProps> = ({
   required = false,
   error,
   disabled = false,
-  className = ''
+  className = '',
+  helpText
 }) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onChange(e.target.value);
@@ -64,6 +66,11 @@ export const FormInput: React.FC<FormInputProps> = ({
           className="mt-1 text-sm text-red-600"
         >
           {error}
+        </p>
+      )}
+      {helpText && !error && (
+        <p className="mt-1 text-sm text-gray-500">
+          {helpText}
         </p>
       )}
     </div>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { BusinessInfo } from '@/lib/onboarding-types';
-import { INDUSTRIES, TIMEZONES } from '@/lib/onboarding-constants';
+import { TIMEZONES } from '@/lib/onboarding-constants';
 import { FormInput } from './shared/FormInput';
 import { FormSelect } from './shared/FormSelect';
 import { StepContainer } from './StepContainer';
@@ -52,12 +52,12 @@ export const Step1Business: React.FC<Step1BusinessProps> = ({
         />
 
         {/* Industry */}
-        <FormSelect
-          label="Industria"
+        <FormInput
+          label="Industria / Tipo de negocio"
           name="industry"
           value={data.industry}
           onChange={(value) => updateField('industry', value)}
-          options={INDUSTRIES}
+          placeholder="Ej: Barbería, Hospital, Clínica Dental, Gym, Spa, Restaurante"
           required
         />
 

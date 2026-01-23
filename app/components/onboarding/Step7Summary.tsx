@@ -19,18 +19,42 @@ export const Step7Summary: React.FC<Step7SummaryProps> = ({
   const generateJSON = (): OnboardingOutput => {
     return {
       metadata: {
-        version: '1.0',
+        version: '2.0.0',
         createdAt: new Date().toISOString(),
-        completedBy: 'landing-form'
+        completedBy: data.business.contactPerson.email || 'landing-form'
       },
-      client: data,
+      client: {
+        plan: data.plan,
+        clientName: data.business.clientName,
+        industry: data.business.industry,
+        location: data.business.location,
+        timezone: data.business.timezone,
+        contactPerson: data.business.contactPerson,
+        whatsappConfig: {
+          phoneNumber: data.whatsapp.phoneNumber,
+          phoneNumberId: data.whatsapp.phoneNumberId,
+          businessAccountId: data.whatsapp.businessAccountId,
+          accessToken: data.whatsapp.accessToken,
+          webhookVerifyToken: data.whatsapp.webhookVerifyToken,
+          appId: data.whatsapp.appId,
+          appSecret: data.whatsapp.appSecret
+        },
+        assistantConfig: data.assistant,
+        status: 'trial',
+        tier: data.plan
+      },
+      services: data.services.services,
+      tenants: data.tenants,
       nextSteps: [
         '1. Crear registro en tabla Clients de DynamoDB',
-        '2. Crear Bedrock Agent con clientId generado',
-        '3. Configurar Knowledge Base en Aurora pgvector',
-        '4. Registrar webhook de WhatsApp en Meta Cloud API',
-        '5. Subir documentos de servicios al Knowledge Base',
-        '6. Realizar prueba completa de conversación'
+        '2. Crear Services (múltiples records)',
+        '3. Crear Tenants con businessHours y appointmentSettings',
+        '4. Guardar accessToken en AWS Secrets Manager',
+        '5. Crear Bedrock Agent con assistantConfig',
+        '6. Configurar Knowledge Base en Aurora pgvector',
+        '7. Registrar webhook de WhatsApp en Meta Cloud API',
+        '8. Subir documentos iniciales al Knowledge Base',
+        '9. Realizar prueba completa de conversación'
       ]
     };
   };
@@ -123,8 +147,10 @@ export const Step7Summary: React.FC<Step7SummaryProps> = ({
               </button>
             </div>
             <ul className="text-sm text-gray-700 space-y-1">
-              <li>• {data.whatsapp.phoneNumber}</li>
-              <li>• Credenciales: {data.whatsapp.hasAccount ? 'Configuradas ✓' : 'Pendientes'}</li>
+              <li>• Teléfono: {data.whatsapp.phoneNumber}</li>
+              <li>• Phone Number ID: {data.whatsapp.phoneNumberId}</li>
+              <li>• Business Account ID: {data.whatsapp.businessAccountId}</li>
+              <li>• Webhook Token: {data.whatsapp.webhookVerifyToken ? 'Configurado ✓' : 'Pendiente'}</li>
             </ul>
           </div>
 

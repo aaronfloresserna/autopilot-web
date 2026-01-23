@@ -1,24 +1,16 @@
 import { OnboardingFormData } from './onboarding-types';
 
-// Industry options
-export const INDUSTRIES = [
-  { value: 'barberia', label: 'Barbería' },
-  { value: 'hospital', label: 'Hospital/Clínica' },
-  { value: 'gym', label: 'Gym/Fitness' },
-  { value: 'spa', label: 'Spa/Salón de belleza' },
-  { value: 'restaurant', label: 'Restaurante' },
-  { value: 'consultorio', label: 'Consultorio médico' },
-  { value: 'other', label: 'Otro' }
-];
-
-// Timezone options (Mexico)
+// Timezone options (AWS standard format)
 export const TIMEZONES = [
-  { value: 'America/Tijuana', label: 'Tijuana (UTC-8, PST)' },
-  { value: 'America/Hermosillo', label: 'Hermosillo (UTC-7, MST sin DST)' },
-  { value: 'America/Chihuahua', label: 'Chihuahua (UTC-7, MST)' },
-  { value: 'America/Mazatlan', label: 'Mazatlán (UTC-7, MST)' },
-  { value: 'America/Mexico_City', label: 'Ciudad de México (UTC-6, CST)' },
-  { value: 'America/Cancun', label: 'Cancún (UTC-5, EST)' }
+  { value: 'America/Tijuana', label: 'America/Tijuana (UTC-8)' },
+  { value: 'America/Hermosillo', label: 'America/Hermosillo (UTC-7)' },
+  { value: 'America/Chihuahua', label: 'America/Chihuahua (UTC-7)' },
+  { value: 'America/Mazatlan', label: 'America/Mazatlan (UTC-7)' },
+  { value: 'America/Mexico_City', label: 'America/Mexico_City (UTC-6)' },
+  { value: 'America/Cancun', label: 'America/Cancun (UTC-5)' },
+  { value: 'America/Monterrey', label: 'America/Monterrey (UTC-6)' },
+  { value: 'America/Merida', label: 'America/Merida (UTC-6)' },
+  { value: 'UTC', label: 'UTC (UTC+0)' }
 ];
 
 // Currency options
@@ -104,9 +96,10 @@ export const STEP_TITLES = [
 
 // Default form data
 export const DEFAULT_FORM_DATA: OnboardingFormData = {
+  plan: 'basic', // Default plan (can be overridden from query param)
   business: {
     clientName: '',
-    industry: 'barberia',
+    industry: '', // Free text field
     location: {
       street: '',
       city: '',
@@ -121,16 +114,19 @@ export const DEFAULT_FORM_DATA: OnboardingFormData = {
     }
   },
   whatsapp: {
-    hasAccount: false,
     phoneNumber: '',
     phoneNumberId: '',
+    businessAccountId: '',
     accessToken: '',
-    businessAccountId: ''
+    webhookVerifyToken: '',
+    appId: '',
+    appSecret: ''
   },
   services: {
     currency: 'MXN',
     services: []
   },
+  tenants: [], // Will be populated in Step 4
   schedule: {
     monday: { enabled: true, open: '09:00', close: '18:00' },
     tuesday: { enabled: true, open: '09:00', close: '18:00' },

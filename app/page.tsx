@@ -16,7 +16,7 @@ export default function Home() {
               <a href="#pricing" className="text-slate-300 hover:text-white transition">Precios</a>
               <a href="#faq" className="text-slate-300 hover:text-white transition">Preguntas</a>
             </div>
-            <Link href="/onboarding" className="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-6 py-2 rounded-lg hover:shadow-lg hover:shadow-purple-500/50 transition inline-block">
+            <Link href="/plans" className="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-6 py-2 rounded-lg hover:shadow-lg hover:shadow-purple-500/50 transition inline-block">
               Activa tu Autopilot
             </Link>
           </div>
@@ -37,7 +37,7 @@ export default function Home() {
             Duerme tranquilo mientras tu IA maneja atención al cliente, citas, ventas y operaciones. 24/7, sin empleados, sin estrés.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/onboarding" className="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:shadow-xl hover:shadow-purple-500/50 transition transform hover:scale-105 inline-block text-center">
+            <Link href="/plans" className="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:shadow-xl hover:shadow-purple-500/50 transition transform hover:scale-105 inline-block text-center">
               Activa tu Autopilot
             </Link>
             <button className="border border-slate-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-slate-800 transition">
@@ -317,7 +317,7 @@ export default function Home() {
                     </li>
                   ))}
                 </ul>
-                <Link href="/onboarding" className={`w-full py-3 rounded-lg font-semibold transition inline-block text-center ${
+                <Link href="/plans" className={`w-full py-3 rounded-lg font-semibold transition inline-block text-center ${
                   plan.popular
                     ? 'bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:shadow-lg hover:shadow-purple-500/50'
                     : 'border border-slate-600 text-white hover:bg-slate-800'
@@ -389,7 +389,7 @@ export default function Home() {
           <p className="text-xl text-slate-300 mb-10">
             Únete a cientos de negocios que operan sin empleados y sin estrés
           </p>
-          <Link href="/onboarding" className="bg-white text-slate-900 px-8 py-4 rounded-lg text-lg font-semibold hover:shadow-xl transition transform hover:scale-105 inline-block">
+          <Link href="/plans" className="bg-white text-slate-900 px-8 py-4 rounded-lg text-lg font-semibold hover:shadow-xl transition transform hover:scale-105 inline-block">
             Activa tu Autopilot Gratis
           </Link>
           <p className="text-slate-400 mt-4 text-sm">Sin tarjeta • Prueba de 14 días • Cancela cuando quieras</p>

@@ -12,15 +12,9 @@ export const businessSchema = z.object({
     .min(2, "Mínimo 2 caracteres")
     .max(100, "Máximo 100 caracteres"),
 
-  industry: z.enum([
-    'barberia',
-    'hospital',
-    'gym',
-    'spa',
-    'restaurant',
-    'consultorio',
-    'other'
-  ], { message: "Selecciona una industria" }),
+  industry: z.string()
+    .min(2, "Mínimo 2 caracteres")
+    .max(100, "Máximo 100 caracteres"),
 
   location: z.object({
     street: z.string().optional(),
@@ -41,20 +35,35 @@ export const businessSchema = z.object({
 
 // Step 2: WhatsApp
 export const whatsappSchema = z.object({
-  hasAccount: z.boolean(),
   phoneNumber: z.string()
-    .regex(/^\+\d{10,15}$/, "Formato: +52 614 123 4567"),
-  phoneNumberId: z.string().optional(),
-  accessToken: z.string().optional(),
-  businessAccountId: z.string().optional()
-}).refine(data => {
-  if (data.hasAccount) {
-    return data.phoneNumberId && data.accessToken && data.businessAccountId;
-  }
-  return true;
-}, {
-  message: "Completa todos los campos de credenciales",
-  path: ["phoneNumberId"]
+    .regex(/^\+\d{10,15}$/, "Formato válido: +52 614 123 4567"),
+
+  phoneNumberId: z.string()
+    .min(10, "Phone Number ID inválido (mínimo 10 caracteres)")
+    .regex(/^\d+$/, "Solo debe contener números"),
+
+  businessAccountId: z.string()
+    .min(10, "Business Account ID inválido (mínimo 10 caracteres)")
+    .regex(/^\d+$/, "Solo debe contener números"),
+
+  accessToken: z.string()
+    .min(50, "Access Token muy corto (mínimo 50 caracteres)")
+    .regex(/^[A-Za-z0-9_-]+$/, "Token inválido (caracteres especiales no permitidos)"),
+
+  webhookVerifyToken: z.string()
+    .min(16, "Token debe tener mínimo 16 caracteres")
+    .max(100, "Token debe tener máximo 100 caracteres")
+    .regex(/^[A-Za-z0-9_-]+$/, "Solo letras, números, guiones y guiones bajos"),
+
+  appId: z.string()
+    .regex(/^\d+$/, "App ID solo debe contener números")
+    .optional()
+    .or(z.literal('')),
+
+  appSecret: z.string()
+    .min(32, "App Secret debe tener mínimo 32 caracteres")
+    .optional()
+    .or(z.literal(''))
 });
 
 // Step 3: Services

@@ -1,6 +1,7 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { useOnboardingForm } from '@/hooks/useOnboardingForm';
 import { ProgressBar } from '@/app/components/onboarding/ProgressBar';
 import { NavigationButtons } from '@/app/components/onboarding/NavigationButtons';
@@ -12,7 +13,10 @@ import { Step5Policies } from '@/app/components/onboarding/Step5Policies';
 import { Step6Assistant } from '@/app/components/onboarding/Step6Assistant';
 import { Step7Summary } from '@/app/components/onboarding/Step7Summary';
 
-export default function OnboardingPage() {
+function OnboardingContent() {
+  const searchParams = useSearchParams();
+  const selectedPlan = searchParams.get('plan') || 'basic'; // basic | pro | enterprise
+
   const {
     currentStep,
     formData,
@@ -22,8 +26,16 @@ export default function OnboardingPage() {
     goNext,
     goBack,
     goToStep,
-    reset
+    reset,
+    setPlan
   } = useOnboardingForm();
+
+  // Set plan from query param on mount
+  useEffect(() => {
+    if (selectedPlan) {
+      setPlan(selectedPlan as 'basic' | 'pro' | 'enterprise');
+    }
+  }, [selectedPlan, setPlan]);
 
   if (isLoading) {
     return (
@@ -82,6 +94,7 @@ export default function OnboardingPage() {
             data={formData.assistant}
             onChange={(data) => updateStep('assistant', data)}
             errors={errors[6]}
+            industryType={formData.business.industry}
           />
         );
       case 7:
@@ -101,8 +114,23 @@ export default function OnboardingPage() {
     }
   };
 
+  const planLabels = {
+    basic: { name: 'Básico', maxTenants: 1, color: 'from-slate-600 to-slate-500' },
+    pro: { name: 'Pro', maxTenants: 5, color: 'from-purple-600 to-blue-600' },
+    enterprise: { name: 'Enterprise', maxTenants: 15, color: 'from-blue-600 to-cyan-600' }
+  };
+
+  const currentPlanInfo = planLabels[formData.plan || 'basic'];
+
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Plan Badge */}
+      <div className="mb-4 flex justify-center">
+        <div className={`bg-gradient-to-r ${currentPlanInfo.color} text-white px-6 py-2 rounded-full text-sm font-semibold shadow-lg`}>
+          Plan {currentPlanInfo.name} • Hasta {currentPlanInfo.maxTenants} {currentPlanInfo.maxTenants === 1 ? 'profesional' : 'profesionales'}
+        </div>
+      </div>
+
       <ProgressBar currentStep={currentStep} />
 
       <div className="mt-8">
@@ -115,5 +143,17 @@ export default function OnboardingPage() {
         onNext={goNext}
       />
     </div>
+  );
+}
+
+export default function OnboardingPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-white text-lg">Cargando...</div>
+      </div>
+    }>
+      <OnboardingContent />
+    </Suspense>
   );
 }

@@ -15,9 +15,9 @@ const STEP_KEYS: Record<number, keyof OnboardingFormData> = {
   1: 'business',
   2: 'whatsapp',
   3: 'services',
-  4: 'schedule',
-  5: 'policies',
-  6: 'assistant'
+  4: 'tenants',  // Changed from 'schedule'
+  5: 'assistant'  // Changed from 'policies', moved up
+  // Step 6 is summary (no validation)
 };
 
 export const useOnboardingForm = () => {
@@ -102,6 +102,11 @@ export const useOnboardingForm = () => {
     setErrors({});
   };
 
+  // Set plan (from query param)
+  const setPlan = (plan: 'basic' | 'pro' | 'enterprise') => {
+    setFormData(prev => ({ ...prev, plan }));
+  };
+
   return {
     currentStep,
     formData,
@@ -112,6 +117,7 @@ export const useOnboardingForm = () => {
     goNext,
     goBack,
     goToStep,
-    reset
+    reset,
+    setPlan
   };
 };
